@@ -1,0 +1,22 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Hima Bindu and Vineeth//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:gandhapu-nalugu-20270220@himabindu-vineeth
+DTSTAMP:20261120T000000Z
+DTSTART:20270220T053000Z
+SUMMARY:Gandhapu Nalugu • Hima Bindu and Vineeth
+LOCATION:MCS Kalyana Mandapam\, near Vijay Mahal\, Nellore
+DESCRIPTION:Starts at 11:00 AM IST. Lunch at 12:00 noon IST.
+END:VEVENT
+BEGIN:VEVENT
+UID:muhurtham-20270221@himabindu-vineeth
+DTSTAMP:20261120T000000Z
+DTSTART:20270221T034600Z
+DTEND:20270221T053200Z
+SUMMARY:Wedding Muhurtham • Hima Bindu and Vineeth
+LOCATION:KGK Kalyana Mandapam\, Dhanalakshmipuram\, Nellore
+DESCRIPTION:9:16–11:02 AM IST. Pushkarakalam 9:52–9:56 AM IST.
+END:VEVENT
+END:VCALENDAR
