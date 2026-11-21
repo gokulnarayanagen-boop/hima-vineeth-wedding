@@ -3021,20 +3021,20 @@
         root.lang = root.lang === 'te' ? 'en' : 'te';
         store.set('hv-lang', root.lang);
       }));
-      /* ---------- Invisible Always-Playing Geetha Govindam Piano Soundtrack ---------- */
-      // Pure piano instrumentals (zero vocals): Geetha Govindam (Inkem Inkem Inkem Kaavaale, Vachindamma, Yenti Yenti)
+      /* ---------- Invisible Always-Playing Local Wedding Piano Soundtrack (YouTube Fallback Only on Error) ---------- */
       const tracks = ['9pzjU656k0A', 'LWgkKzuuGRo', '4sc29e9ebH8', 'x5vZqK3ZW94', 'R1-4YI-he78', 'S8iq2dYBwao'];
       let currentTrack = 0;
       let errorTries = 0;
       let wantPlay = true;
       let ytPlayer = null;
       let ytReady = false;
-      let localReady = false;
       let localFailed = false;
       const bgMusic = document.getElementById('bg-music');
-      bgMusic.volume = 0.52;
-      bgMusic.addEventListener('canplay', () => { localReady = true; });
-      bgMusic.addEventListener('error', () => { localFailed = true; });
+      bgMusic.volume = 0.62;
+      bgMusic.addEventListener('error', () => {
+        localFailed = true;
+        if (wantPlay) loadYouTubeAPI();
+      });
 
       function loadYouTubeAPI() {
         if (window.YT?.Player || document.getElementById('yt-api-script')) return;
@@ -3045,7 +3045,7 @@
       }
 
       window.onYouTubeIframeAPIReady = () => {
-        if (ytPlayer) return;
+        if (ytPlayer || !localFailed) return;
         const vars = { autoplay: 1, controls: 0, playsinline: 1, rel: 0 };
         if (location.protocol.startsWith('http')) vars.origin = location.origin;
         ytPlayer = new YT.Player('yt-player', {
@@ -3056,7 +3056,7 @@
             onReady: () => {
               ytReady = true;
               try { ytPlayer.setVolume(62); } catch { }
-              if (wantPlay && !localReady) ensureMusicPlaying();
+              if (wantPlay && localFailed) ensureMusicPlaying();
             },
             onStateChange: (e) => {
               if (e.data === 1) errorTries = 0;
@@ -3074,13 +3074,12 @@
           }
         });
       };
-      loadYouTubeAPI();
 
       function ensureMusicPlaying() {
         wantPlay = true;
         if (!localFailed) {
           if (bgMusic.paused) bgMusic.play().catch(() => { });
-          if (localReady) return;
+          return;
         }
         if (ytReady && ytPlayer) {
           try {
@@ -3094,7 +3093,8 @@
         }
       }
 
-      // Unlock continuous playback on the earliest user interaction (including reloads)
+      // Attempt immediate playback where allowed, and unlock seamlessly on earliest interaction
+      ensureMusicPlaying();
       ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(evt => {
         addEventListener(evt, () => {
           if (wantPlay) ensureMusicPlaying();
